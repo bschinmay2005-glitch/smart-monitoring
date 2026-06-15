@@ -1,0 +1,7 @@
+CollegeID,TeacherUsername,Department,Semester,Section,Subject,StartDate,EndDate,Status,Day,StartTime,EndTime
+RNSF_5857,Chinmay_,BCA,1,A,Computer Fundamentals,,,Active,,,
+RNSF_5857,Dhanush_,BCA,1,A,Mathematics I,,,Active,,,
+RNSF_5857,Chinmay_,BCA,2,B,Data Structures,,,Active,,,
+RNSF_5857,Dhanush_,BCA,2,B,Organizational Behavior,,,Active,,,
+GLOB_7093,bharat_3706,BBA,1,A,Business Analytics,,,Active,,,
+GLOB_7093,bharat_3706,BBA,1,B,Financial Accounting,,,Active,,,

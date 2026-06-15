@@ -1,0 +1,19 @@
+{
+    "RNS_5014": "RNS",
+    "BGS_6111": "bgs",
+    "RNSF_5857": {
+        "name": "RNSFGC",
+        "admin_username": "RNSF_5857_admin",
+        "admin_password": "RNSF_5857Admin"
+    },
+    "GLOB_7093": {
+        "name": "global institute",
+        "admin_username": "GLOB_7093_admin",
+        "admin_password": "GLOB_7093Admin"
+    },
+    "PALA_7137": {
+        "name": "palar",
+        "admin_username": "PALA_7137_admin",
+        "admin_password": "PALA_7137Admin"
+    }
+}

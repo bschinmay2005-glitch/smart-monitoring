@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create Teacher Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: sans-serif; background: #0f172a; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 40px; border-radius: 12px; width: 350px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #22c55e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .back { display: block; margin-top: 15px; color: #94a3b8; text-decoration: none; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+    <i class="fas fa-user-shield" style="font-size: 2.5rem; color: #3b82f6; margin-bottom: 15px;"></i>
+    <h2>Teacher Registration</h2>
+    <input type="text" id="t_name" placeholder="Full Name" required>
+    <input type="text" id="t_phone" placeholder="Phone Number" required>
+    <input type="text" id="c_id" placeholder="College ID" required>
+    <button onclick="registerTeacher()">Generate Credentials</button>
+    <div id="credentials-box" style="display:none; margin-top: 20px; padding: 15px; background: #0f172a; border: 1px solid #3b82f6; border-radius: 8px;">
+        <p style="color: #22c55e; font-weight: bold;">Account Created!</p>
+        <p>Username: <span id="disp_user" style="color: #f59e0b;"></span></p>
+        <p>Password: <span id="disp_pass" style="color: #f59e0b;"></span></p>
+        <small style="color: #94a3b8;">Please save these. They cannot be changed.</small>
+        <br><br>
+        <a href="/login" style="background: #3b82f6; color: white; padding: 5px 15px; border-radius: 5px;">Go to Login</a>
+    </div>
+</div>
+<script>
+async function registerTeacher() {
+   const details = {
+    name: document.getElementById('t_name').value,
+    phone: document.getElementById('t_phone').value,
+    c_id: document.getElementById('c_id').value
+};
+    const response = await fetch('/register_teacher', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(details)
+    });
+    const result = await response.json();
+    if (result.success) {
+
+    document.getElementById('credentials-box').style.display = "block";
+
+    document.getElementById('disp_user').innerText =
+    result.username;
+
+    document.getElementById('disp_pass').innerText =
+    result.password;
+
+} else {
+
+    alert(result.message || "Invalid details entered");
+
+}
+}
+</script>
+</body>
+</html>

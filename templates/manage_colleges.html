@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin | Manage Colleges</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; padding: 40px; }
+        .card { background: #1e293b; padding: 25px; border-radius: 15px; border: 1px solid #334155; max-width: 900px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #334155; }
+        .btn-approve { background: #22c55e; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; }
+        #popup { display:none; position: fixed; bottom: 20px; right: 20px; background: #3b82f6; padding: 20px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Pending College Requests</h2>
+        <table>
+            <thead><tr><th>Name</th><th>Location</th><th>Action</th></tr></thead>
+            <tbody id="list"></tbody>
+        </table>
+        <hr style="border: 0; border-top: 1px solid #334155; margin: 30px 0;">
+        <button onclick="toggleApproved()" style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;">
+            View All Registered Colleges
+        </button>
+        <div id="approved-section" style="display:none; margin-top: 20px;">
+            <h3>Registered Colleges</h3>
+            <table style="background: #0f172a;">
+                <thead>
+    <tr>
+    <th>College ID</th>
+    <th>College Name</th>
+    <th>Admin Username</th>
+    <th>Admin Password</th>
+    </tr>
+    </thead>
+                <tbody id="approved-list"></tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+    async function load() {
+        const response = await fetch('/get_pending_requests');
+        const data = await response.json();
+        const list = document.getElementById('list');
+        
+        if (data.length === 0) {
+            list.innerHTML = "<tr><td colspan='3' style='text-align:center; color:#94a3b8;'>No pending requests.</td></tr>";
+            return;
+        }
+        list.innerHTML = data.map(req => `
+            <tr>
+                <td>${req.name}</td>
+                <td>${req.date || 'Pending'}</td>
+                <td>
+                    <button class="btn-approve" onclick="approve(${req.request_id}, '${req.name}')">
+                        Approve
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+    async function approve(id, name) {
+    const response = await fetch('/approve_college', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ request_id: id, name: name })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+        alert("College approved successfully. Login details are now available for the college user.");
+        load();
+    }
+}
+    async function toggleApproved() {
+        const section = document.getElementById('approved-section');
+        const list = document.getElementById('approved-list');
+        if (section.style.display === "none") {
+            const res = await fetch('/get_approved_colleges');
+            const data = await res.json();
+            list.innerHTML = data.map(c => `
+    <tr>
+        <td style="color: #3b82f6; font-family: monospace; font-weight: bold;">${c.id}</td>
+        <td>${c.name}</td>
+        <td>${c.admin_username || '-'}</td>
+        <td>${c.admin_password || '-'}</td>
+    </tr>
+`).join('');
+            section.style.display = "block";
+        } else {
+            section.style.display = "none";
+        }
+    }
+    window.onload = load;
+</script>
+</body>
+</html>

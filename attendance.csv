@@ -1,0 +1,9 @@
+Name,ID,Department,Semester,Section,Subject,Date,Time,Status,Teacher
+putin,2,BCA,2,B,Organizational Behavior,2026-05-14,18:28:08,Present,Dhanush_
+trump,3,BCA,2,B,Organizational Behavior,2026-05-14,-,Absent,-
+Chinmay,1,BCA,1,A,Computer Fundamentals,2026-05-15,23:43:00,Present,Chinmay_
+virat,j,BCA,1,A,Computer Fundamentals,2026-05-15,-,Absent,
+Chinmay,1,BCA,1,A,Computer Fundamentals,2026-05-21,01:30:24,Present,Chinmay_
+Virat,S0003,BCA,2,B,Organizational Behavior,2026-05-27,12:14:14,Present,Dhanush_
+Trump,S0001,BCA,1,A,Mathematics I,2026-05-27,12:15:11,Present,Dhanush_
+Virat,S0002,BBA,1,A,Business Analytics,2026-05-29,00:07:19,Present,bharat_3706

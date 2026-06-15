@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Camera Attendance</title>
+
+<style>
+body{
+    font-family: Arial;
+    text-align:center;
+}
+
+video{
+    border:2px solid black;
+    border-radius:10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>Camera Attendance</h2>
+
+<video id="video" width="350" autoplay muted playsinline></video>
+
+<br><br>
+
+<button onclick="capture()">Capture</button>
+
+<p id="status">Starting camera...</p>
+
+<script>
+
+const video = document.getElementById("video");
+const statusText = document.getElementById("status");
+
+async function startCamera(){
+
+    try{
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video:{ facingMode:"environment" },
+            audio:false
+        });
+
+        video.srcObject = stream;
+
+        video.onloadedmetadata = function(){
+
+            video.play();
+            statusText.innerText = "Camera Ready";
+
+            console.log("Camera started");
+
+        }
+
+    }
+    catch(error){
+
+        statusText.innerText = "Camera permission denied";
+        alert("Camera permission denied or not supported");
+
+        console.log(error);
+    }
+
+}
+
+startCamera();
+
+
+function capture(){
+
+    if(video.videoWidth === 0){
+
+        alert("Camera still loading...");
+        return;
+    }
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(video,0,0);
+
+    const image = canvas.toDataURL("image/jpeg");
+
+    fetch("/process_frame",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({image:image})
+    })
+    .then(res => res.json())
+    .then(data=>{
+        console.log(data);
+        alert("Frame sent successfully");
+    })
+    .catch(err=>{
+        console.log(err);
+        alert("Error sending frame");
+    });
+
+}
+
+</script>
+
+</body>
+</html>

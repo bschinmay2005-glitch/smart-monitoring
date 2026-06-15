@@ -1,0 +1,111 @@
+Department,Semester,Subject
+BCA,1,Computer Fundamentals
+BCA,1,Programming in C
+BCA,1,Mathematics I
+BCA,1,Business Communication
+BCA,1,Environmental Science
+BCA,2,Data Structures
+BCA,2,Digital Electronics
+BCA,2,Mathematics II
+BCA,2,Organizational Behavior
+BCA,2,Advanced C Programming
+BCA,3,Object Oriented Programming using C++
+BCA,3,Operating Systems
+BCA,3,Database Management Systems
+BCA,3,Software Engineering
+BCA,3,Computer Architecture
+BCA,4,Java Programming
+BCA,4,Computer Networks
+BCA,4,Discrete Mathematics
+BCA,4,Web Technology
+BCA,4,System Analysis and Design
+BCA,5,Python Programming
+BCA,5,Mobile Application Development
+BCA,5,Information Security
+BCA,5,Cloud Computing
+BCA,5,Artificial Intelligence
+BCA,6,Machine Learning
+BCA,6,Mobile Computing
+BCA,6,Digital Marketing
+BCA,6,Internet of Things
+BCA,6,Major Project
+BBA,1,Principles of Management
+BBA,1,Business Economics
+BBA,1,Financial Accounting
+BBA,1,Business Mathematics
+BBA,1,English for Business
+BBA,2,Business Law
+BBA,2,Marketing Management
+BBA,2,Macroeconomics
+BBA,2,Business Statistics
+BBA,2,Cost Accounting
+BBA,3,Human Resource Management
+BBA,3,Production and Operations Management
+BBA,3,Financial Management
+BBA,3,Business Research Methods
+BBA,3,Consumer Behavior
+BBA,4,Entrepreneurship Development
+BBA,4,Supply Chain Management
+BBA,4,Taxation
+BBA,4,Management Information Systems
+BBA,4,International Business
+BBA,5,Strategic Management
+BBA,5,Banking and Insurance
+BBA,5,Advertising and Sales Promotion
+BBA,5,Business Ethics
+BBA,5,Retail Management
+BBA,6,Digital Marketing
+BBA,6,Public Relations
+BBA,6,Project Work
+BBA,6,Corporate Social Responsibility
+BBA,6,Portfolio Management
+BCom,1,Financial Accounting I
+BCom,1,Business Organization
+BCom,1,Microeconomics
+BCom,1,Business Mathematics
+BCom,1,Commercial Law
+BCom,2,Financial Accounting II
+BCom,2,Business Statistics
+BCom,2,Macroeconomics
+BCom,2,Corporate Law
+BCom,2,Principles of Marketing
+BCom,3,Corporate Accounting
+BCom,3,Income Tax Law
+BCom,3,Management Principles
+BCom,3,Banking Operations
+BCom,3,Company Law
+BCom,4,Cost Accounting
+BCom,4,Auditing
+BCom,4,E-Commerce
+BCom,4,Business Environment
+BCom,4,Public Finance
+BCom,5,Management Accounting
+BCom,5,GST and Customs Law
+BCom,5,Financial Markets
+BCom,5,International Trade
+BCom,5,Human Resource Management
+BCom,6,Business Ethics
+BCom,6,Investment Management
+BCom,6,Entrepreneurship
+BCom,6,Industrial Law
+BCom,6,Viva Voce / Project
+MBA,1,Management Theory and Practice
+MBA,1,Managerial Economics
+MBA,1,Accounting for Managers
+MBA,1,Organizational Behavior
+MBA,1,Statistics for Management
+MBA,2,Marketing Management
+MBA,2,Financial Management
+MBA,2,Human Resource Management
+MBA,2,Business Research Methods
+MBA,2,Operations Management
+MBA,3,Strategic Management
+MBA,3,Project Management
+MBA,3,Consumer Behavior
+MBA,3,International Business
+MBA,3,Elective I
+MBA,4,Entrepreneurship Development
+MBA,4,Corporate Governance
+MBA,4,Internship Project
+MBA,4,Elective II
+MBA,4,Comprehensive Viva

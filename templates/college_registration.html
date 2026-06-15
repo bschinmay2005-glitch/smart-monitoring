@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>College Registration</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 40px; border-radius: 20px; width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #334155; }
+        h2 { color: #3b82f6; margin-bottom: 5px; }
+        p { color: #94a3b8; margin-bottom: 20px; font-size: 0.9rem; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.3s; }
+        button:hover { background: #2563eb; }
+        #success-msg { display:none; color: #22c55e; margin-top: 15px; background: #064e3b; padding: 12px; border-radius: 8px; border: 1px solid #059669; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>College Registration</h2>
+        <p>Apply to join the Attendance Network</p>
+        <input type="text" id="c_name" placeholder="College Name" required>
+        <input type="email" id="c_email" placeholder="Admin Email" required>
+        <input type="text" id="c_loc" placeholder="City / Location" required>
+        <button onclick="submitRequest()">Submit Application</button>
+        <div id="success-msg">Application Sent! Admin will review your request.</div>
+    </div>
+    <script>
+    async function submitRequest() {
+        const details = {
+            name: document.getElementById('c_name').value,
+            email: document.getElementById('c_email').value,
+            location: document.getElementById('c_loc').value
+        };
+        if(!details.name || !details.email || !details.location) {
+            alert("Please fill all fields");
+            return;
+        }
+        const res = await fetch('/submit_college_request', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(details)
+        });
+        const data = await res.json();
+        if(data.success) {
+            document.getElementById('success-msg').style.display = 'block';
+            document.querySelector('button').style.display = 'none';
+        }
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Login | Attendance System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a; /* Dark Blue Theme */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-card {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            color: white;
+            text-align: center;
+        }
+        .login-card i {
+            font-size: 3rem;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+        h2 { margin-bottom: 30px; }
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        label { display: block; margin-bottom: 8px; color: #94a3b8; }
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .login-btn:hover { background-color: #2563eb; }
+        #error-msg {
+            color: #ef4444;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="login-card">
+    <i class="fas fa-chalkboard-teacher"></i>
+    <h2>Teacher Login</h2>
+    <div class="input-group">
+        <label>Username</label>
+        <input type="text" id="username" placeholder="Enter username">
+    </div>
+    <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter password">
+    </div>
+    <button class="login-btn" onclick="login()">Login to Dashboard</button>
+    <button class="login-btn" style="margin-top:10px; background:#22c55e;" onclick="adminLogin()">
+    Login as College Admin
+</button>
+<p style="margin-top: 20px; color: #94a3b8;">Don't have an account? 
+    <a href="/signup" style="color: #3b82f6; text-decoration: none; font-weight: bold;">Create one</a>
+</p>
+<p id="error-msg">Invalid Username or Password!</p>
+</div>
+<script>
+async function login() {
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    const error = document.getElementById('error-msg');
+    const response = await fetch('/login_auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user, password: pass })
+    });
+    const result = await response.json();
+    if (result.success) {
+        window.location.href = "/admin";
+    } else {
+        error.style.display = "block";
+    }
+}
+function adminLogin() {
+    window.location.href = "/college_admin_login";
+}
+</script>
+</body>
+</html>

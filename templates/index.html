@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome | Face Attendance System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0f172a; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; color: white; }
+        .portal-container { text-align: center; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
+        .option-card { background: #1e293b; padding: 40px; border-radius: 15px; cursor: pointer; transition: 0.3s; border: 2px solid transparent; width: 200px; }
+        .option-card:hover { border-color: #3b82f6; transform: translateY(-10px); background: #334155; }
+        .option-card i { font-size: 3rem; color: #3b82f6; margin-bottom: 20px; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        p { color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <div class="portal-container">
+        <h1>Attendance Portal</h1>
+        <p>Please select your role to continue</p>
+        <div class="options-grid">
+            <div class="option-card" onclick="window.location.href='/login'">
+                <i class="fas fa-user-tie"></i>
+                <h3>Teacher</h3>
+                <span>Login to Manage</span>
+            </div>
+            <div class="option-card" onclick="window.location.href='/student_portal'">
+                <i class="fas fa-user-graduate"></i>
+                <h3>Student</h3>
+                <span>Check Performance</span>
+            </div>
+            <div style="margin-top: 30px; text-align: center; width: 100%;">
+    <p style="color: #94a3b8; font-size: 0.9rem;">
+        Are you a College Administrator? 
+        <a href="/college_registration" style="color: #3b82f6; text-decoration: none; font-weight: bold;">Register your College</a>
+    </p>
+</div>
+        </div>
+    </div>
+</body>
+</html>

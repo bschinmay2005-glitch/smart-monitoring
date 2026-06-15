@@ -1,0 +1,5 @@
+Name,ID,Phone,Parent,P_Phone,Gender,Class,Department,Semester,Section
+Chinmay B S,S0041,9900866094,suresh babu,9986014936,Male,3rd year,,,
+Abhishek,0003,1234567890,abc,987654321,Male,6 sem,,,
+name,id,phone,parent_name,parent_phone,gender,,department,semester,section
+john,1,1234567890,sins,0987654321,Male,,BCA,1,A

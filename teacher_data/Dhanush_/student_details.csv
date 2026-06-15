@@ -1,0 +1,3 @@
+Name,ID,Phone,Parent,P_Phone,Gender,Department,Semester,Section
+john,1,1234567890,sins,987654321,Male,BCA,1,A
+john,1,1234567890,sins,0987654321,Male,BCA,1,A

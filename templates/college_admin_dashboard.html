@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>College Admin Dashboard</title>
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            display: flex;
+        }
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: #143864;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+            position: fixed;
+        }
+        .sidebar h2 {
+            color: #3b82f6;
+            margin-bottom: 35px;
+        }
+        .nav-item {
+        padding: 12px 15px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        box-sizing: border-box;
+        gap: 10px;
+    }
+        .nav-item:hover,
+        .nav-item.active {
+            background: #334155;
+            color: #3b82f6;
+        }
+        .main {
+            margin-left: 260px;
+            padding: 40px;
+            width: calc(100% - 260px);
+            background: radial-gradient(circle at top left, #1e293b, #0f172a);
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .page {
+            display: none;
+        }
+        .page.active-page {
+            display: block;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #f1f5f9;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 100%;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #3b82f6;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #assign-msg {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        h1, h2, h3, label { color: #f8fafc; }
+p { color: #cbd5e1;}
+table {background: transparent;
+       color: #f1f5f9; }
+th {
+    background: #1e293b;
+    color: #93c5fd;
+}
+td {
+    background: rgba(15,23,42,0.6);
+    color: #e2e8f0;
+    border-bottom: 1px solid #334155;
+}
+.nav-item:hover,
+.nav-item.active {
+    background: #334155;
+    color: #60a5fa;
+}
+    </style>
+</head>
+<body>
+<div class="sidebar" style="display:flex; flex-direction:column;">
+    <div style="text-align:center; margin-bottom:-40px;">
+    <img src="/static/novux_logo.png"
+        style="
+        width:150%;
+        height:160px;
+        object-fit:cover;
+        object-position:center;
+        display:block;
+        margin-top:-30px;
+        margin-left:-68px;
+        ">
+</div>
+    <div class="nav-item active"
+            onclick="showPage('dashboard', this)">
+    <i class="fas fa-home"></i> Dashboard
+    </div>
+    <div class="nav-item" onclick="showPage('assignTeacher', this)">
+        <i class="fas fa-chalkboard-teacher"></i> Assign Teacher
+    </div>
+    <div class="nav-item" onclick="showPage('registerStudent', this)">
+        <i class="fas fa-user-plus"></i> Register Student
+    </div>
+    <div class="nav-item" onclick="showPage('allStudents', this)">
+        <i class="fas fa-user-graduate"></i> View All Students
+    </div>
+    <div class="nav-item" onclick="showPage('timetable', this)">
+        <i class="fas fa-calendar-alt"></i> Timetable Management
+    </div>
+    <div class="nav-item"
+    onclick="confirmLogout()"
+    style="color:#ef4444; margin-top:40px;">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </div>
+</div>
+<div class="main">
+    <div id="dashboard" class="page active-page">
+        <h1>College Admin Dashboard</h1>
+        <div class="card">
+            <div style="
+                background:linear-gradient(135deg,#2563eb,#1d4ed8);
+                padding:35px;
+                border-radius:20px;
+                color:white;
+                margin-bottom:25px;
+                box-shadow:0 10px 25px rgba(37,99,235,0.3);
+                ">
+                    <h1 style="margin:0;font-size:42px;">
+                        Welcome, {{ college_name }}
+                    </h1>
+                    <p style="margin-top:10px;font-size:18px;opacity:0.9;">
+                        Manage teachers, students, attendance and timetable from one place.
+                    </p>
+                </div>
+                <div style="
+                display:grid;
+                grid-template-columns:repeat(3,1fr);
+                gap:25px;
+                margin-top:20px;
+                ">
+                    <div style="
+                    background:white;
+                    border-radius:20px;
+                    padding:30px;
+                    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+                    border-left:8px solid #3b82f6;
+                    ">
+                        <h3 style="margin:0;color:#cbd5e1;">
+                            Total Students
+                        </h3>
+                        <h1 id="dashTotalStudents"
+                        style="font-size:50px;margin-top:15px;color:#0f172a;">
+                            0
+                        </h1>
+                    </div>
+                    <div style="
+                    background:white;
+                    border-radius:20px;
+                    padding:30px;
+                    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+                    border-left:8px solid #22c55e;
+                    ">
+                        <h3 style="margin:0;color:#cbd5e1;">
+                            Total Teachers
+                        </h3>
+                        <h1 id="dashTotalTeachers"
+                        style="font-size:50px;margin-top:15px;color:#0f172a;">
+                            0
+                        </h1>
+                    </div>
+                    <div style="
+                    background:white;
+                    border-radius:20px;
+                    padding:30px;
+                    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+                    border-left:8px solid #f59e0b;
+                    ">
+                        <h3 style="margin:0;color:#cbd5e1;">
+                            Timetable Status
+                        </h3>
+                        <h1 id="dashTimetables"
+                        style="font-size:40px;margin-top:20px;color:#0f172a;">
+                            Active
+                        </h1>
+                    </div>
+                </div>
+    </div>
+    </div>
+    <div id="assignTeacher" class="page">
+        <h1>Assign Teacher to Class</h1>
+        <div class="card">
+            <label>Teacher</label>
+            <select id="teacher_username"></select>
+            <label>Department</label>
+            <input type="text" id="department" placeholder="Example: BCA" onchange="loadSubjects()">
+            <label>Semester</label>
+            <input type="text" id="semester" placeholder="Example: 1" onchange="loadSubjects()">
+            <label>Section</label>
+            <input type="text" id="section" placeholder="Example: A" onchange="loadSubjects()">
+            <label>Subject</label>
+<select id="subject" onchange="loadSubjectSchedule()"></select>
+<div id="subjectScheduleBox"
+style="
+margin-top:15px;
+margin-bottom:15px;
+padding:10px;
+background:#f1f5f9;
+border-radius:8px;
+color:#0f172a;
+font-weight:bold;
+">
+</div>
+<button onclick="assignTeacher()">Assign Teacher</button>
+            <p id="assign-msg"></p>
+        </div>
+    </div>
+    <div id="registerStudent" class="page">
+    <h1>Register Student</h1>
+    <div class="card">
+        <label>Full Name</label>
+        <input type="text" id="student_name" placeholder="Student Name">
+        <label>Student ID</label>
+        <input type="text" id="student_id" placeholder="Student ID">
+        <label>Phone Number</label>
+        <input type="text" id="phone" placeholder="Phone">
+        <label>Parent Name</label>
+        <input type="text" id="parent_name" placeholder="Parent Name">
+        <label>Parent Phone</label>
+        <input type="text" id="parent_phone" placeholder="Parent Phone">
+        <label>Gender</label>
+        <select id="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+        <label>Department</label>
+        <input type="text" id="reg_department" placeholder="Example: BCA">
+        <label>Semester</label>
+        <input type="text" id="reg_semester" placeholder="Example: 1">
+        <label>Section</label>
+        <input type="text" id="reg_section" placeholder="Example: A">
+        <button onclick="registerStudentByAdmin()">Capture Face & Register</button>
+        <p id="register-msg"></p>
+    </div>
+</div>
+    <div id="allStudents" class="page">
+    <h1>All Registered Students</h1>
+    <div class="card" style="max-width: 100%;">
+        <div style="display:flex; gap:12px; margin-bottom:15px; align-items:center;">
+
+    <button onclick="loadAllAdminStudents()">Refresh Students</button>
+
+    <select id="filter_department" onchange="filterAdminStudents()" style="width:180px;">
+        <option value="">All Courses</option>
+    </select>
+
+    <select id="filter_semester" onchange="filterAdminStudents()" style="width:180px;">
+        <option value="">All Semesters</option>
+    </select>
+
+    <select id="filter_section" onchange="filterAdminStudents()" style="width:180px;">
+        <option value="">All Sections</option>
+    </select>
+
+</div>
+        <br><br>
+        <table border="1" width="100%" cellpadding="10" style="border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Phone</th>
+                    <th>Parent Name</th>
+                    <th>Parent Phone</th>
+                    <th>Gender</th>
+                    <th>Department</th>
+                    <th>Semester</th>
+                    <th>Section</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="admin-student-table">
+                <tr>
+                    <td colspan="10" style="text-align:center;">Loading students...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="timetable" class="page">
+    <h1>Timetable Management</h1>
+    <div class="card">
+        <h3>Upload Timetable CSV File</h3>
+        <label>Department</label>
+<select id="tt_department" onchange="loadAvailableSemesters()">
+    <option value="BCA">BCA</option>
+    <option value="BBA">BBA</option>
+    <option value="BCom">BCom</option>
+    <option value="MBA">MBA</option>
+</select>
+<label>Semester</label>
+<select id="tt_semester" onchange="loadAvailableSections()">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+</select>
+<label>Section</label>
+<select id="tt_section">
+    <option value="A">A</option>
+    <option value="B">B</option>
+    <option value="C">C</option>
+</select>
+        <input type="file" id="timetableFile">
+        <br><br>
+        <button onclick="uploadTimetable()">
+            Upload Timetable
+        </button>
+        <p id="timetableMsg"></p>
+        <hr style="margin:30px 0;">
+        <h3>Upload Period Timings CSV</h3>
+        <input type="file" id="periodTimingFile">
+        <br><br>
+        <button onclick="uploadPeriodTimings()">
+            Upload Period Timings
+        </button>
+        <p id="periodTimingMsg"></p>
+        <hr style="margin:30px 0;">
+<h3>View / Edit Uploaded Timetable</h3>
+<label>Select Department</label>
+<select id="view_tt_department"
+onchange="loadViewSemesters()">
+</select>
+
+<label>Select Semester</label>
+<select id="view_tt_semester"
+onchange="loadViewSections()">
+</select>
+
+<label>Select Section</label>
+<select id="view_tt_section">
+</select>
+<button onclick="loadSelectedTimetable()">View Timetable</button>
+<button onclick="enableTimetableEdit()">Edit</button>
+<button onclick="saveEditedTimetable()">Save Changes</button>
+<br><br>
+<div id="selectedTimetableBox"></div>
+</div>
+    </div>
+</div>
+</div>
+<script>
+function showPage(pageId, element) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active-page"));
+    document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+    document.getElementById(pageId).classList.add("active-page");
+    element.classList.add("active");
+    if (pageId === "allStudents") {
+        loadAllAdminStudents();
+    }
+}
+async function assignTeacher() {
+    const msg = document.getElementById("assign-msg");
+    const data = {
+        teacher_username: document.getElementById("teacher_username").value,
+        department: document.getElementById("department").value,
+        semester: document.getElementById("semester").value,
+        section: document.getElementById("section").value,
+        subject: document.getElementById("subject").value
+    };
+    try {
+        const response = await fetch("/assign_teacher", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            msg.style.color = "#22c55e";
+            msg.innerText = "Teacher assigned successfully";
+            alert("Teacher assigned successfully");
+        } else {
+            msg.style.color = "#ef4444";
+            msg.innerText = result.message || "Assignment failed";
+        }
+    } catch (error) {
+        msg.style.color = "#ef4444";
+        msg.innerText = "Backend connection failed";
+        console.log(error);
+    }
+}
+async function loadTeachers() {
+    const res = await fetch("/get_teachers");
+    const data = await res.json();
+    const assignDropdown = document.getElementById("teacher_username");
+    if (data.length === 0) {
+        if (assignDropdown) assignDropdown.innerHTML = "<option>No teachers</option>";
+        return;
+    }
+    const options = data.map(t =>
+        `<option value="${t.username}">
+            ${t.name} (${t.username})
+        </option>`
+    ).join('');
+    if (assignDropdown) assignDropdown.innerHTML = options;
+}
+window.onload = function() {
+    loadTeachers();
+    loadAllAdminStudents();
+    loadAvailableTimetableOptions();
+    loadDashboardStats();
+    loadUploadedTimetableOptions();
+}
+async function registerStudentByAdmin() {
+    const name = document.getElementById("student_name").value;
+    const id = document.getElementById("student_id").value;
+    const phone = document.getElementById("phone").value;
+    const p_name = document.getElementById("parent_name").value;
+    const p_phone = document.getElementById("parent_phone").value;
+    const gender = document.getElementById("gender").value;
+    const dept = document.getElementById("reg_department").value;
+    const sem = document.getElementById("reg_semester").value;
+    const sec = document.getElementById("reg_section").value;
+    const msg = document.getElementById("register-msg");
+    if (!name || !id || !dept || !sem || !sec) {
+        msg.style.color = "red";
+        msg.innerText = "Fill name, ID, department, semester and section";
+        return;
+    }
+    const params = new URLSearchParams({
+        name: name,
+        id: id,
+        phone: phone,
+        p_name: p_name,
+        p_phone: p_phone,
+        gender: gender,
+        department: dept,
+        semester: sem,
+        section: sec
+    });
+    const res = await fetch("/admin_register_student?" + params.toString());
+    const data = await res.json();
+    if (data.success) {
+        msg.style.color = "green";
+        msg.innerText = "Camera started. Register face now.";
+        alert("Camera started. Register face now.");
+    } else {
+        msg.style.color = "red";
+        msg.innerText = data.message || "Error";
+    }
+}
+async function loadAllAdminStudents() {
+    const table = document.getElementById("admin-student-table");
+    table.innerHTML = `
+        <tr>
+            <td colspan="9" style="text-align:center;">Loading...</td>
+        </tr>
+    `;
+    try {
+        const res = await fetch("/admin_all_students");
+        const students = await res.json();
+        if (students.length === 0) {
+            table.innerHTML = `
+                <tr>
+                    <td colspan="9" style="text-align:center;color:red;">
+                        No students registered
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        allAdminStudents = students;
+        setupStudentFilters(students);
+        renderAdminStudents(students);
+    } catch (error) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="9" style="text-align:center;color:red;">
+                    Failed to load students
+                </td>
+            </tr>
+        `;
+        console.log(error);
+    }
+}
+async function loadSubjects() {
+    const dept = document.getElementById("department").value;
+    const sem = document.getElementById("semester").value;
+    const subjectDropdown = document.getElementById("subject");
+    if (!dept || !sem) {
+        subjectDropdown.innerHTML = `<option value="">Select department and semester first</option>`;
+        return;
+    }
+    const sec = document.getElementById("section").value;
+const response = await fetch(
+    `/get_subjects?department=${dept}&semester=${sem}&section=${sec}`
+);
+    const subjects = await response.json();
+
+    if (subjects.length === 0) {
+        subjectDropdown.innerHTML = `<option value="">No subjects found</option>`;
+        return;
+    }
+    subjectDropdown.innerHTML = subjects.map(sub =>
+        `<option value="${sub}">${sub}</option>`
+    ).join("");
+}
+async function uploadTimetable() {
+    const fileInput = document.getElementById("timetableFile");
+    const msg = document.getElementById("timetableMsg");
+    if (!fileInput.files.length) {
+        msg.style.color = "red";
+        msg.innerText = "Please select a timetable CSV file";
+        return;
+    }
+    const dept = document.getElementById("tt_department").value;
+    const sem = document.getElementById("tt_semester").value;
+    const sec = document.getElementById("tt_section").value;
+    const formData = new FormData();
+formData.append("file", fileInput.files[0]);
+formData.append("department", dept);
+formData.append("semester", sem);
+formData.append("section", sec);
+    const response = await fetch("/upload_timetable", {
+        method: "POST",
+        body: formData
+    });
+    const result = await response.json();
+    if (result.success) {
+        msg.style.color = "green";
+    } else {
+        msg.style.color = "red";
+    }
+    msg.innerText = result.message;
+    if (result.success) {
+    loadAvailableTimetableOptions();
+}
+}
+async function uploadPeriodTimings() {
+    const fileInput = document.getElementById("periodTimingFile");
+    const msg = document.getElementById("periodTimingMsg");
+    if (!fileInput.files.length) {
+        msg.style.color = "red";
+        msg.innerText = "Please select period timings CSV file";
+        return;
+    }
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+    const response = await fetch("/upload_period_timings", {
+        method: "POST",
+        body: formData
+    });
+    const result = await response.json();
+    if (result.success) {
+        msg.style.color = "green";
+    } else {
+        msg.style.color = "red";
+    }
+    msg.innerText = result.message;
+}
+async function loadSubjectSchedule() {
+    const dept = document.getElementById("department").value;
+    const sem = document.getElementById("semester").value;
+    const sec = document.getElementById("section").value;
+    const subject = document.getElementById("subject").value;
+    const box = document.getElementById("subjectScheduleBox");
+    if (!dept || !sem || !sec || !subject) {
+        box.innerHTML = "";
+        return;
+    }
+    const response = await fetch(
+        `/get_subject_schedule?department=${dept}&semester=${sem}&section=${sec}&subject=${subject}`
+    );
+    const data = await response.json();
+    if (data.length === 0) {
+        box.innerHTML = "No timetable found for this subject.";
+        return;
+    }
+    box.innerHTML = data.map(item =>
+        `${item.day} - ${item.period} - ${item.time}`
+    ).join("<br>");
+}
+async function deleteStudent(studentId, department, semester, section) {
+    if (!confirm("Delete this student permanently?")) {
+        return;
+    }
+    const response = await fetch("/admin_delete_student", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            student_id: studentId,
+            department: department,
+            semester: semester,
+            section: section
+        })
+    });
+    const result = await response.json();
+    alert(result.message);
+    if (result.success) {
+        loadAllAdminStudents();
+    }
+}
+let allAdminStudents = [];
+function setupStudentFilters(students) {
+    const deptBox = document.getElementById("filter_department");
+    const semBox = document.getElementById("filter_semester");
+    const secBox = document.getElementById("filter_section");
+    const departments = [...new Set(students.map(s => s.Department).filter(Boolean))];
+    const semesters = [...new Set(students.map(s => s.Semester).filter(Boolean))];
+    const sections = [...new Set(students.map(s => s.Section).filter(Boolean))];
+    deptBox.innerHTML = `<option value="">All Courses</option>` +
+        departments.map(d => `<option value="${d}">${d}</option>`).join("");
+    semBox.innerHTML = `<option value="">All Semesters</option>` +
+        semesters.map(s => `<option value="${s}">${s}</option>`).join("");
+    secBox.innerHTML = `<option value="">All Sections</option>` +
+        sections.map(s => `<option value="${s}">${s}</option>`).join("");
+}
+function renderAdminStudents(students) {
+    const table = document.getElementById("admin-student-table");
+    if (students.length === 0) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="10" style="text-align:center;color:red;">
+                    No students found
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    table.innerHTML = students.map(s => `
+        <tr>
+            <td>${s.Name || "-"}</td>
+            <td>${s.ID || "-"}</td>
+            <td>${s.Phone || "-"}</td>
+            <td>${s.Parent || "-"}</td>
+            <td>${s.P_Phone || "-"}</td>
+            <td>${s.Gender || "-"}</td>
+            <td>${s.Department || "-"}</td>
+            <td>${s.Semester || "-"}</td>
+            <td>${s.Section || "-"}</td>
+            <td>
+                <button onclick="deleteStudent('${s.ID}', '${s.Department}', '${s.Semester}', '${s.Section}')"
+                style="background:red;color:white;padding:8px 12px;border:none;border-radius:6px;cursor:pointer;">
+                    Delete
+                </button>
+            </td>
+        </tr>
+    `).join("");
+}
+function filterAdminStudents() {
+    const dept = document.getElementById("filter_department").value;
+    const sem = document.getElementById("filter_semester").value;
+    const sec = document.getElementById("filter_section").value;
+    const filtered = allAdminStudents.filter(s =>
+        (dept === "" || s.Department === dept) &&
+        (sem === "" || String(s.Semester) === String(sem)) &&
+        (sec === "" || s.Section === sec)
+    );
+    renderAdminStudents(filtered);
+}
+let availableTimetableOptions = {};
+let uploadedTimetableOptions = {};
+async function loadAvailableTimetableOptions() {
+    const res = await fetch("/available_timetable_options");
+    availableTimetableOptions = await res.json();
+
+    const deptDropdown = document.getElementById("tt_department");
+
+    deptDropdown.innerHTML = Object.keys(availableTimetableOptions).map(dept =>
+        `<option value="${dept}">${dept}</option>`
+    ).join("");
+
+    loadAvailableSemesters();
+}
+async function loadUploadedTimetableOptions() {
+    const res = await fetch("/uploaded_timetable_options");
+    uploadedTimetableOptions = await res.json();
+    loadViewDepartments();
+}
+function loadAvailableSemesters() {
+    const dept = document.getElementById("tt_department").value;
+    const semDropdown = document.getElementById("tt_semester");
+    if (!availableTimetableOptions[dept]) {
+        semDropdown.innerHTML = "";
+        document.getElementById("tt_section").innerHTML = "";
+        return;
+    }
+    semDropdown.innerHTML = Object.keys(availableTimetableOptions[dept]).map(sem =>
+        `<option value="${sem}">${sem}</option>`
+    ).join("");
+    loadAvailableSections();
+}
+function loadAvailableSections() {
+    const dept = document.getElementById("tt_department").value;
+    const sem = document.getElementById("tt_semester").value;
+    const sectionDropdown = document.getElementById("tt_section");
+    if (!availableTimetableOptions[dept] || !availableTimetableOptions[dept][sem]) {
+        sectionDropdown.innerHTML = "";
+        return;
+    }
+    sectionDropdown.innerHTML = availableTimetableOptions[dept][sem].map(sec =>
+        `<option value="${sec}">${sec}</option>`
+    ).join("");
+}
+function loadViewDepartments() {
+
+    const deptDropdown =
+    document.getElementById("view_tt_department");
+
+    deptDropdown.innerHTML =
+    Object.keys(uploadedTimetableOptions).map(dept =>
+
+        `<option value="${dept}">
+            ${dept}
+        </option>`
+
+    ).join("");
+
+    loadViewSemesters();
+}
+
+function loadViewSemesters() {
+
+    const dept =
+    document.getElementById("view_tt_department").value;
+
+    const semDropdown =
+    document.getElementById("view_tt_semester");
+
+    if (!uploadedTimetableOptions[dept]) {
+        semDropdown.innerHTML = "";
+        return;
+    }
+
+    semDropdown.innerHTML =
+
+    Object.keys(uploadedTimetableOptions[dept]).map(sem =>
+
+        `<option value="${sem}">
+            ${sem}
+        </option>`
+
+    ).join("");
+
+    loadViewSections();
+}
+
+function loadViewSections() {
+
+    const dept =
+    document.getElementById("view_tt_department").value;
+
+    const sem =
+    document.getElementById("view_tt_semester").value;
+
+    const sectionDropdown =
+    document.getElementById("view_tt_section");
+
+    if (
+        !uploadedTimetableOptions[dept]
+        ||
+        !uploadedTimetableOptions[dept][sem]
+    ) {
+        sectionDropdown.innerHTML = "";
+        return;
+    }
+
+    sectionDropdown.innerHTML =
+
+    uploadedTimetableOptions[dept][sem].map(sec =>
+
+        `<option value="${sec}">
+            ${sec}
+        </option>`
+
+    ).join("");
+}
+let selectedTimetableData = [];
+let editMode = false;
+async function loadSelectedTimetable() {
+    editMode = false;
+    const dept = document.getElementById("view_tt_department").value;
+    const sem = document.getElementById("view_tt_semester").value;
+    const sec = document.getElementById("view_tt_section").value;
+    const res = await fetch(
+        `/view_timetables?department=${dept}&semester=${sem}&section=${sec}`
+    );
+    selectedTimetableData = await res.json();
+    renderSelectedTimetable();
+}
+function renderSelectedTimetable() {
+    const box = document.getElementById("selectedTimetableBox");
+    if (selectedTimetableData.length === 0) {
+        box.innerHTML = `
+            <p style="color:red;">
+                No timetable uploaded for this class.
+            </p>
+        `;
+        return;
+    }
+    let html = `
+        <h3>
+            ${selectedTimetableData[0].Department}
+            - Semester ${selectedTimetableData[0].Semester}
+            - Section ${selectedTimetableData[0].Section}
+        </h3>
+        <table border="1"
+        width="100%"
+        cellpadding="10"
+        style="border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Period 1</th>
+                    <th>Period 2</th>
+                    <th>Period 3</th>
+                    <th>Period 4</th>
+                    <th>Period 5</th>
+                    <th>Period 6</th>
+                </tr>
+            </thead>
+
+            <tbody>
+    `;
+    selectedTimetableData.forEach((row, index) => {
+        html += `
+            <tr>
+                <td>${row.Day}</td>
+                ${["Sub1","Sub2","Sub3","Sub4","Sub5","Sub6"].map(col => `
+                    <td>
+                        ${
+                            editMode
+                            ? `<input
+                                value="${row[col] || ''}"
+                                onchange="
+                                    selectedTimetableData[${index}]['${col}']
+                                    = this.value
+                                "
+                            >`
+                            : `${row[col] || '-'}`
+                        }
+                    </td>
+                `).join("")}
+            </tr>
+        `;
+    });
+    html += `
+            </tbody>
+        </table>
+    `;
+    box.innerHTML = html;
+}
+function enableTimetableEdit() {
+    editMode = true;
+    renderSelectedTimetable();
+}
+async function saveEditedTimetable() {
+    const res = await fetch("/save_full_timetable_edit", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(selectedTimetableData)
+    });
+    const result = await res.json();
+    alert(result.message);
+    if (result.success) {
+        editMode = false;
+        loadSelectedTimetable();
+    }
+}
+async function loadDashboardStats(){
+    const studentsRes = await fetch("/admin_all_students");
+    const students = await studentsRes.json();
+    const teachersRes = await fetch("/get_teachers");
+    const teachers = await teachersRes.json();
+    const timetableRes = await fetch("/view_timetables?department=BCA&semester=1&section=A");
+    const timetable = await timetableRes.json();
+    document.getElementById("dashTotalStudents").innerText = students.length;
+    document.getElementById("dashTotalTeachers").innerText = teachers.length;
+    document.getElementById("dashTimetables").innerText = timetable.length > 0 ? "Uploaded" : "Check";
+}
+</script>
+<script>
+function confirmLogout() {
+    Swal.fire({
+        title: 'Sign Out?',
+        text: "Are you sure you want to logout from Novux?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3b82f6',
+        cancelButtonColor: '#ef4444',
+        confirmButtonText: 'Yes, Logout',
+        cancelButtonText: 'Cancel',
+        background: '#1e293b',
+        color: '#ffffff',
+        iconColor: '#3b82f6',
+        backdrop: `rgba(15, 23, 42, 0.8)`
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "/logout";
+        }
+    });
+}
+</script>
+</body>
+</html>

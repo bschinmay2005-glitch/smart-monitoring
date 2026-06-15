@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Login</title>
+    <style>
+        body{
+            margin:0;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:#0f172a;
+            font-family:Arial;
+        }
+        .card{
+            background:#1e293b;
+            padding:40px;
+            border-radius:12px;
+            width:350px;
+            text-align:center;
+            color:white;
+        }
+        input{
+            width:100%;
+            padding:12px;
+            margin-top:20px;
+            border:none;
+            border-radius:8px;
+            box-sizing:border-box;
+        }
+        button{
+            width:100%;
+            padding:12px;
+            margin-top:20px;
+            border:none;
+            border-radius:8px;
+            background:#3b82f6;
+            color:white;
+            font-weight:bold;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Student Login</h1>
+    <form action="/student_login_action" method="POST">
+        <input
+        type="text"
+        name="student_id"
+        placeholder="Enter Student ID"
+        required>
+        <button type="submit">
+            Login
+        </button>
+    </form>
+</div>
+</body>
+</html>
