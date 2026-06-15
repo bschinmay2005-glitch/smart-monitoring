@@ -1,4 +1,4 @@
-from database import create_table
+# from database import create_table
 from flask import Flask, render_template, redirect, request, jsonify, session
 from supabase_client import supabase
 import subprocess
