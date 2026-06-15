@@ -25,7 +25,7 @@ def load_pending():
     return []
 app = Flask(__name__)
 app.secret_key = "bca_project_secure_key"
-create_table()
+# create_table()
 camera_process = None
 @app.route("/")
 def index():
