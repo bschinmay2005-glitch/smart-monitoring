@@ -1,0 +1,6 @@
+Flask
+supabase
+opencv-python
+numpy
+pandas
+python-dotenv
