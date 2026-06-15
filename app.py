@@ -40,18 +40,25 @@ def college_admin_login():
 def login_action():
     username = request.form.get("username")
     password = request.form.get("password")
-    if os.path.exists("registered_teachers.txt"):
-        with open("registered_teachers.txt", "r") as f:
-            for line in f:
-                if f"User: {username}" in line and f"Pass: {password}" in line:
-                    parts = line.strip().split(" | ")
-                    teacher_name = parts[1].replace("Name: ", "").strip()
-                    teacher_department = parts[2].replace("Department: ", "").strip()
-                    session['logged_in'] = True
-                    session['username'] = username
-                    session['teacher_name'] = teacher_name
-                    session['teacher_department'] = teacher_department
-                    return redirect("/admin")
+
+    result = (
+        supabase
+        .table("teachers")
+        .select("*")
+        .eq("username", username)
+        .eq("password", password)
+        .execute()
+    )
+
+    if result.data:
+        teacher = result.data[0]
+
+        session["logged_in"] = True
+        session["username"] = teacher["username"]
+        session["teacher_name"] = teacher["name"]
+
+        return redirect("/admin")
+
     return "<h1>Invalid Credentials. <a href='/login'>Try Again</a></h1>"
 @app.route("/login_auth", methods=["POST"])
 def login_auth():
