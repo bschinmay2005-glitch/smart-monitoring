@@ -1,4 +1,3 @@
-# from database import create_table
 from flask import Flask, render_template, redirect, request, jsonify, session
 from supabase_client import supabase
 import subprocess
@@ -25,7 +24,6 @@ def load_pending():
     return []
 app = Flask(__name__)
 app.secret_key = "bca_project_secure_key"
-# create_table()
 camera_process = None
 @app.route("/")
 def index():
